@@ -1,5 +1,15 @@
 <script setup>
+import {ElMessageBox} from "element-plus";
+import router from "../router/index.js";
 
+const messageTips = () => {
+  ElMessageBox.confirm(`确定去往后台管理系统吗？`, {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+  }).then(() => {
+    router.push('/backLogin')
+  })
+}
 </script>
 
 <template>
@@ -22,7 +32,7 @@
     <el-menu-item index="/content/classification">分类查找</el-menu-item>
     <el-menu-item index="/content/comment">评价记录</el-menu-item>
     <el-menu-item index="/content/person">个人信息</el-menu-item>
-    <el-menu-item index="/backLogin">后台管理系统</el-menu-item>
+    <el-menu-item @click="messageTips">后台管理系统</el-menu-item>
   </el-menu>
 </template>
 

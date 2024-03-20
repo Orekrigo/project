@@ -9,6 +9,7 @@ router.register(r'admin', views.AdminViewSet, basename='admin')
 router.register(r'recommend', views.RecommendViewSet, basename='recommend')
 router.register(r'comment', views.CommentViewSet, basename='comment')
 router.register(r'borrow', views.BorrowViewSet, basename='borrow')
+router.register(r'bookAll', views.BookAllViewSet, basename='bookAll')
 urlpatterns = [
     path('', include(router.urls))
 ]

@@ -1,18 +1,17 @@
 <script setup>
 import {onMounted, reactive} from "vue";
-import {getBookList} from "../../api/api.js";
+import {getBookAllList} from "../../api/api.js";
 import router from "../../router/index.js";
 
 const bookClass = reactive(new Set())
 onMounted(() => {
   bookClass.clear()
-  for (let i = 1; i <= 10; i++) {
-    getBookList(i).then(res => {
-      for (let i = 0; i < 5; i++) {
-        bookClass.add(res.data.results[i].classification)
-      }
-    })
-  }
+  getBookAllList().then(res => {
+    console.log(res.data)
+    for (let i = 0; i < res.data.length; i++) {
+      bookClass.add(res.data[i].classification)
+    }
+  })
 })
 const clickButtonClass = (item) => {
   router.push({name: "classDetail", query: {classification: item}})

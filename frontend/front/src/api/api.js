@@ -50,6 +50,10 @@ async function deleteUser(id) {
     return await axios.delete(`api/user/${id}/`)
 }
 
+async function getUserList() {
+    return await axios.get(`api/user/`)
+}
+
 
 // comment
 
@@ -103,6 +107,19 @@ async function getAdminInfoByID(id) {
     return await axios.get(`api/admin/${id}/`)
 }
 
+async function putAdminInfo(id, params) {
+    return await axios.put(`api/admin/${id}/`, params)
+}
+
+async function deleteAdminInfo(id) {
+    return await axios.delete(`api/admin/${id}/`)
+}
+
+//bookAll
+async function getBookAllList() {
+    return await axios.get(`api/bookAll`)
+}
+
 export {
     getBookList,
     getBookDetail,
@@ -127,5 +144,9 @@ export {
     deleteBorrowInfo,
     getAllBorrowInfo,
     getBookByClass,
-    getAdminInfoByID
+    getAdminInfoByID,
+    putAdminInfo,
+    deleteAdminInfo,
+    getUserList,
+    getBookAllList
 }

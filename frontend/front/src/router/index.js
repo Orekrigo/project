@@ -15,6 +15,8 @@ import BorrowingRankView from "../views/frontViews/BorrowingRankView.vue";
 import {reactive} from "vue";
 import ClassDetailView from "../views/frontViews/ClassDetailView.vue";
 import BackPersonView from "../views/backViews/BackPersonView.vue";
+import BackUserManageView from "../views/backViews/BackUserManageView.vue";
+import BackBookManageView from "../views/backViews/BackBookManageView.vue";
 
 
 const router = createRouter({
@@ -83,12 +85,23 @@ const router = createRouter({
         {
             path: '/back',
             name: "back",
+            redirect: '/back/backPerson',
             component: BackContainerView,
             children: [
                 {
                     path: 'backPerson',
                     name: "backPerson",
                     component: BackPersonView
+                },
+                {
+                    path: 'backUser',
+                    name: "backUser",
+                    component: BackUserManageView
+                },
+                {
+                    path: 'backBook',
+                    name: "backBook",
+                    component: BackBookManageView
                 }
             ]
         },
@@ -110,7 +123,7 @@ const router = createRouter({
     ]
 })
 const contentAllName = reactive(["content", "home", "bookDetail", "person", "comment", "classification", "search", "recommendation", "borrowingRecords", "borrowingRank", "classDetail"])
-const backAllName = reactive(["back", "backPerson"])
+const backAllName = reactive(["back", "backPerson", "backUser", "backBook"])
 router.beforeEach((to, from, next) => {
     if (!sessionStorage.getItem('userID') && !sessionStorage.getItem('adminID') && (contentAllName.includes(to.name) || backAllName.includes(to.name))) {
         next(false)

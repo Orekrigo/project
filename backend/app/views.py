@@ -27,6 +27,11 @@ class BookViewSet(viewsets.ModelViewSet):
     filterset_fields = ["title", "author", "publish", "classification"]
 
 
+class BookAllViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
