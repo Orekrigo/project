@@ -4,8 +4,10 @@ import {getAdminInfoByID} from "../../api/api.js";
 import {Avatar, Comment, Cpu, HomeFilled, Promotion, Reading, ShoppingCart, UserFilled} from "@element-plus/icons-vue";
 import {ElMessageBox} from "element-plus";
 import router from "../../router/index.js";
+import {useRoute} from "vue-router";
 
 const adminUserName = ref('')
+const route = useRoute()
 onMounted(() => {
   getAdminInfoByID(sessionStorage.getItem('adminID')).then(res => {
     adminUserName.value = res.data.username
@@ -36,42 +38,58 @@ const messageTips = () => {
               active-text-color="#ffd04b"
               background-color="#324057"
               class="el-menu-vertical-demo"
-              default-active="/back/backPerson"
+              :default-active="route.path"
               text-color="#fff"
               :router="true"
               :ellipsis="false"
           >
-            <el-divider />
+            <el-divider/>
             <el-menu-item index="/back/backPerson">
-              <el-icon><HomeFilled /></el-icon>
+              <el-icon>
+                <HomeFilled/>
+              </el-icon>
               <span>个人信息管理</span>
             </el-menu-item>
             <el-menu-item index="/back/backUser">
-              <el-icon><UserFilled /></el-icon>
+              <el-icon>
+                <UserFilled/>
+              </el-icon>
               <span>用户信息管理</span>
             </el-menu-item>
             <el-menu-item index="/back/backBook">
-              <el-icon><Reading /></el-icon>
+              <el-icon>
+                <Reading/>
+              </el-icon>
               <span>图书信息管理</span>
             </el-menu-item>
-            <el-menu-item index="4">
-              <el-icon><Cpu /></el-icon>
+            <el-menu-item index="/back/backRecommendation">
+              <el-icon>
+                <Cpu/>
+              </el-icon>
               <span>图书推荐管理</span>
             </el-menu-item>
-            <el-menu-item index="5">
-              <el-icon><Comment /></el-icon>
+            <el-menu-item index="/back/backComment">
+              <el-icon>
+                <Comment/>
+              </el-icon>
               <span>用户评价管理</span>
             </el-menu-item>
-            <el-menu-item index="6">
-              <el-icon><ShoppingCart /></el-icon>
+            <el-menu-item index="/back/backBorrow">
+              <el-icon>
+                <ShoppingCart/>
+              </el-icon>
               <span>用户借阅管理</span>
             </el-menu-item>
-            <el-menu-item index="7">
-              <el-icon><Avatar /></el-icon>
+            <el-menu-item index="/back/backAdmin">
+              <el-icon>
+                <Avatar/>
+              </el-icon>
               <span>管理员信息管理</span>
             </el-menu-item>
             <el-menu-item @click="messageTips">
-              <el-icon><Promotion /></el-icon>
+              <el-icon>
+                <Promotion/>
+              </el-icon>
               <span>图书推荐系统</span>
             </el-menu-item>
           </el-menu>
@@ -85,8 +103,6 @@ const messageTips = () => {
 </template>
 
 <style scoped>
-
-
 .common-layout {
   position: absolute;
   top: 0;

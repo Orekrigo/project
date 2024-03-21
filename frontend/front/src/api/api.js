@@ -29,6 +29,14 @@ async function getBookByClass(classification) {
     return await axios.get(`api/book/?classification=${classification}`)
 }
 
+async function postBookInfo(params) {
+    return await axios.post(`api/book/`, params)
+}
+
+async function deleteBook(id) {
+    return await axios.delete(`api/book/${id}/`)
+}
+
 // user
 async function getUsernameDetail(params) {
     return await axios.get(`api/user/?username=${params}`)
@@ -52,6 +60,10 @@ async function deleteUser(id) {
 
 async function getUserList() {
     return await axios.get(`api/user/`)
+}
+
+async function searchUser(params) {
+    return await axios.get(`api/user/?search=${params}`)
 }
 
 
@@ -115,9 +127,25 @@ async function deleteAdminInfo(id) {
     return await axios.delete(`api/admin/${id}/`)
 }
 
+async function getAdminList() {
+    return await axios.get(`api/admin/`)
+}
+
+async function searchAdmin(params) {
+    return await axios.get(`api/admin/?search=${params}`)
+}
+
+async function postAdminInfo(params) {
+    return await axios.post(`api/admin/`, params)
+}
+
 //bookAll
 async function getBookAllList() {
     return await axios.get(`api/bookAll`)
+}
+
+async function searchBook(params) {
+    return await axios.get(`api/bookAll/?search=${params}`)
 }
 
 export {
@@ -148,5 +176,12 @@ export {
     putAdminInfo,
     deleteAdminInfo,
     getUserList,
-    getBookAllList
+    getBookAllList,
+    searchUser,
+    searchBook,
+    postBookInfo,
+    deleteBook,
+    getAdminList,
+    searchAdmin,
+    postAdminInfo
 }

@@ -180,8 +180,8 @@ const submitForm = async (formEl) => {
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" @click="submitForm(ruleFormRef)">
+          <el-button @click="dialogFormVisible = false" style="width: 50px">取消</el-button>
+          <el-button type="primary" style="width: 50px" @click="submitForm(ruleFormRef)">
             确定
           </el-button>
         </div>

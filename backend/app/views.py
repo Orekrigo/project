@@ -11,6 +11,7 @@ class AdminViewSet(viewsets.ModelViewSet):
     queryset = Admin.objects.all()
     serializer_class = AdminSerializer
     filterset_fields = ["username"]
+    search_fields = ["username", "password", "name", "gender", "age", "address", "email", "phone"]
 
 
 class BorrowViewSet(viewsets.ModelViewSet):
@@ -30,12 +31,14 @@ class BookViewSet(viewsets.ModelViewSet):
 class BookAllViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    search_fields = ["title", "author", "score", "score_number", "publish", "price", "classification"]
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filterset_fields = ["username"]
+    search_fields = ["username", "password", "name", "gender", "age", "address", "email", "phone", "education", "major"]
 
 
 class CommentViewSet(viewsets.ModelViewSet):

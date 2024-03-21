@@ -1,7 +1,9 @@
 <script setup>
 import {ElMessageBox} from "element-plus";
 import router from "../router/index.js";
+import {useRoute} from "vue-router";
 
+const route = useRoute()
 const messageTips = () => {
   ElMessageBox.confirm(`确定去往后台管理系统吗？`, {
     confirmButtonText: '确定',
@@ -20,10 +22,10 @@ const messageTips = () => {
       background-color="#f6f6f1"
       text-color="#614e3c"
       :router="true"
-      default-active="/content/home"
+      :default-active="route.path"
   >
     <span class="title">图书推荐系统</span>
-    <div class="flex-grow" />
+    <div class="flex-grow"/>
     <el-menu-item index="/content/home">首页(全部图书)</el-menu-item>
     <el-menu-item index="/content/borrowingRank">借阅排行榜</el-menu-item>
     <el-menu-item index="/content/borrowingRecords">借阅记录</el-menu-item>
@@ -40,7 +42,8 @@ const messageTips = () => {
 .flex-grow {
   flex-grow: 1;
 }
-.title{
+
+.title {
   font-size: 25px;
   color: #58402a;
   padding-top: 10px;

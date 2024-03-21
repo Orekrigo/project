@@ -17,6 +17,10 @@ import ClassDetailView from "../views/frontViews/ClassDetailView.vue";
 import BackPersonView from "../views/backViews/BackPersonView.vue";
 import BackUserManageView from "../views/backViews/BackUserManageView.vue";
 import BackBookManageView from "../views/backViews/BackBookManageView.vue";
+import BackAdminManageView from "../views/backViews/BackAdminManageView.vue";
+import BackRecommendationManageView from "../views/backViews/BackRecommendationManageView.vue";
+import BackCommentManageView from "../views/backViews/BackCommentManageView.vue";
+import BackBorrowManageView from "../views/backViews/BackBorrowManageView.vue";
 
 
 const router = createRouter({
@@ -102,6 +106,26 @@ const router = createRouter({
                     path: 'backBook',
                     name: "backBook",
                     component: BackBookManageView
+                },
+                {
+                    path: 'backAdmin',
+                    name: 'backAdmin',
+                    component: BackAdminManageView
+                },
+                {
+                    path: 'backRecommendation',
+                    name: "backRecommendation",
+                    component: BackRecommendationManageView
+                },
+                {
+                    path: 'backComment',
+                    name: "backComment",
+                    component: BackCommentManageView
+                },
+                {
+                    path: 'backBorrow',
+                    name: 'backBorrow',
+                    component: BackBorrowManageView
                 }
             ]
         },
@@ -123,7 +147,7 @@ const router = createRouter({
     ]
 })
 const contentAllName = reactive(["content", "home", "bookDetail", "person", "comment", "classification", "search", "recommendation", "borrowingRecords", "borrowingRank", "classDetail"])
-const backAllName = reactive(["back", "backPerson", "backUser", "backBook"])
+const backAllName = reactive(["back", "backPerson", "backUser", "backBook", "backAdmin", "backRecommendation", "backComment", "backBorrow"])
 router.beforeEach((to, from, next) => {
     if (!sessionStorage.getItem('userID') && !sessionStorage.getItem('adminID') && (contentAllName.includes(to.name) || backAllName.includes(to.name))) {
         next(false)

@@ -1,13 +1,16 @@
 <script setup>
 import {onMounted, reactive, ref} from "vue";
 import {Search} from "@element-plus/icons-vue";
-import {deleteUser, getUserList, getUsernameDetail, postRegister, putPersonalInfo, searchUser} from "../../api/api.js";
+import {
+  deleteAdminInfo, getAdminInfoByUsername,
+  getAdminList, postAdminInfo, putAdminInfo, searchAdmin
+} from "../../api/api.js";
 import {ElMessage, ElMessageBox} from "element-plus";
 
 const input = ref('')
 const tableData = reactive([])
 const tableNowData = reactive([])
-const searchUserData = reactive({
+const searchAdminData = reactive({
   current: 1,
   count: 50,
   pageSize: 10
@@ -22,8 +25,6 @@ const form = reactive({
   address: '',
   email: '',
   phone: '',
-  education: '',
-  major: ''
 })
 const nullForm = reactive({
   username: '',
@@ -34,16 +35,7 @@ const nullForm = reactive({
   address: '',
   email: '',
   phone: '',
-  education: '',
-  major: ''
 })
-const educationOptions = reactive([
-  {id: 1, value: '研究生'},
-  {id: 2, value: '本科'},
-  {id: 3, value: '专科'},
-  {id: 4, value: '高中'},
-  {id: 5, value: '其他'}
-])
 const rules = reactive({
   username: [
     {required: true, message: '请输入账号', trigger: 'blur'},
@@ -80,7 +72,7 @@ const ruleFormRef = ref()
 const male = ref('男')
 const female = ref('女')
 const editOrAdd = ref(1)
-const userId = ref()
+const adminId = ref()
 const alertSuccess = (info) => {
   ElMessage({
     message: `${info}`,
@@ -91,13 +83,13 @@ const alertError = (info) => {
   ElMessage.error(`${info}`)
 }
 const getData = () => {
-  searchUserData.current = 1
+  searchAdminData.current = 1
   tableData.length = 0
   tableNowData.length = 0
-  getUserList().then(res => {
+  getAdminList().then(res => {
     tableData.push(...res.data)
-    searchUserData.count = res.data.length
-    tableNowData.push(...tableData.slice(0, searchUserData.pageSize))
+    searchAdminData.count = res.data.length
+    tableNowData.push(...tableData.slice(0, searchAdminData.pageSize))
   }).catch(err => {
     alert(err)
   })
@@ -105,17 +97,17 @@ const getData = () => {
 onMounted(() => {
   getData()
 })
-const userInfoEdit = (index, row) => {
+const adminInfoEdit = (index, row) => {
   Object.assign(form, row)
   editOrAdd.value = 2
   dialogFormVisible.value = true
 }
-const userInfoDelete = (index, row) => {
+const adminInfoDelete = (index, row) => {
   ElMessageBox.confirm(`确认删除吗？`, {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
   }).then(() => {
-    deleteUser(row.id).then(() => {
+    deleteAdminInfo(row.id).then(() => {
       alertSuccess("删除成功！")
       getData()
     }).catch(err => {
@@ -123,27 +115,27 @@ const userInfoDelete = (index, row) => {
     })
   })
 }
-const addUser = () => {
+const addAdmin = () => {
   Object.assign(form, nullForm)
   editOrAdd.value = 1
   dialogFormVisible.value = true
 }
-const changeUser = (val) => {
-  searchUserData.current = val
-  let start = (val - 1) * searchUserData.pageSize
-  let end = val * searchUserData.pageSize
+const changeAdmin = (val) => {
+  searchAdminData.current = val
+  let start = (val - 1) * searchAdminData.pageSize
+  let end = val * searchAdminData.pageSize
   tableNowData.length = 0
   tableNowData.push(...tableData.slice(start, end))
 }
-const searchUserInfo = () => {
-  searchUser(input.value).then(res => {
+const searchAdminInfo = () => {
+  searchAdmin(input.value).then(res => {
     alertSuccess("搜索成功！")
     tableData.length = 0
     tableNowData.length = 0
-    searchUserData.current = 1
+    searchAdminData.current = 1
     tableData.push(...res.data)
-    searchUserData.count = res.data.length
-    tableNowData.push(...tableData.slice(0, searchUserData.pageSize))
+    searchAdminData.count = res.data.length
+    tableNowData.push(...tableData.slice(0, searchAdminData.pageSize))
   }).catch(err => {
     alertError(err)
   })
@@ -153,26 +145,26 @@ const submitForm = async (formEl, val) => {
   await formEl.validate((valid) => {
     if (valid) {
       if (val === 1) {
-        getUsernameDetail(form.username).then(res => {
+        getAdminInfoByUsername(form.username).then(res => {
           if (!res.data[0]) {
-            postRegister(form).then(() => {
+            postAdminInfo(form).then(() => {
               dialogFormVisible.value = false
               getData()
-              alertSuccess('增加用户成功')
+              alertSuccess('增加成功')
             }).catch(err => {
               alertError(err)
             })
           } else {
-            alertError('该用户已存在')
+            alertError('该管理员已存在')
           }
         }).catch(err => {
           alertError(err)
         })
       } else {
-        userId.value = form.id
+        adminId.value = form.id
         delete form.id
         dialogFormVisible.value = false
-        putPersonalInfo(userId.value, form).then(() => {
+        putAdminInfo(adminId.value, form).then(() => {
           alertSuccess("修改成功！")
           getData()
         }).catch(err => {
@@ -190,8 +182,8 @@ const submitForm = async (formEl, val) => {
   <div>
     <el-divider/>
     <div>
-      <el-button type="primary" @click="addUser">新增+</el-button>
-      <div class="user-manage-top-right">
+      <el-button type="primary" @click="addAdmin">新增+</el-button>
+      <div class="admin-manage-top-right">
         <el-input
             v-model="input"
             style="width: 240px"
@@ -199,10 +191,10 @@ const submitForm = async (formEl, val) => {
             placeholder="请输入(不输入搜索显示全部)"
             :prefix-icon="Search"
         />
-        <el-button type="primary" style="margin-left: 10px" @click="searchUserInfo">搜索</el-button>
+        <el-button type="primary" style="margin-left: 10px" @click="searchAdminInfo">搜索</el-button>
       </div>
     </div>
-    <el-card class="el-card-back-user">
+    <el-card class="el-card-back-admin">
       <el-table :data="tableNowData" style="width: 100%" table-layout="auto">
         <el-table-column label="账号" prop="username"/>
         <el-table-column label="密码" prop="password"/>
@@ -212,66 +204,52 @@ const submitForm = async (formEl, val) => {
         <el-table-column label="地址" prop="address"/>
         <el-table-column label="邮箱" prop="email"/>
         <el-table-column label="手机号" prop="phone"/>
-        <el-table-column label="学历" prop="education"/>
-        <el-table-column label="专业" prop="major"/>
         <el-table-column align="right">
           <template #default="scope">
-            <el-button size="default" @click="userInfoEdit(scope.$index, scope.row)">编辑</el-button>
+            <el-button size="default" @click="adminInfoEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button
                 size="default"
                 type="danger"
-                @click="userInfoDelete(scope.$index, scope.row)">删除
+                @click="adminInfoDelete(scope.$index, scope.row)">删除
             </el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination :current-page="searchUserData.current" class="el-pagination-back-user" background
+      <el-pagination :current-page="searchAdminData.current" class="el-pagination-back-admin" background
                      layout="prev, pager, next"
-                     :total="searchUserData.count" :page-size="searchUserData.pageSize" @current-change="changeUser"/>
+                     :total="searchAdminData.count" :page-size="searchAdminData.pageSize"
+                     @current-change="changeAdmin"/>
     </el-card>
   </div>
   <el-dialog v-model="dialogFormVisible" title="请输入用户信息" destroy-on-close
-             class="el-dialog-user-back">
+             class="el-dialog-admin-back">
     <el-form :model="form" status-icon :rules="rules" ref="ruleFormRef">
-      <el-form-item label="账号" class="el-form-item-user-back" prop="username">
+      <el-form-item label="账号" class="el-form-item-admin-back" prop="username">
         <el-input v-model="form.username" type="text" maxlength="32"/>
       </el-form-item>
-      <el-form-item label="密码" class="el-form-item-user-back" prop="password">
+      <el-form-item label="密码" class="el-form-item-admin-back" prop="password">
         <el-input v-model="form.password" type="password" maxlength="32"/>
       </el-form-item>
-      <el-form-item label="姓名" class="el-form-item-user-back" prop="name">
+      <el-form-item label="姓名" class="el-form-item-admin-back" prop="name">
         <el-input v-model="form.name" type="text" maxlength="32"/>
       </el-form-item>
-      <el-form-item label="性别" class="el-form-item-user-back" prop="gender">
+      <el-form-item label="性别" class="el-form-item-admin-back" prop="gender">
         <el-radio-group v-model="form.gender">
           <el-radio :value="male">男</el-radio>
           <el-radio :value="female" style="padding-left: 10px">女</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="年龄" class="el-form-item-user-back" prop="age">
+      <el-form-item label="年龄" class="el-form-item-admin-back" prop="age">
         <el-input-number v-model="form.age" :min="0" :max="200"/>
       </el-form-item>
-      <el-form-item label="地址" class="el-form-item-user-back" prop="address">
+      <el-form-item label="地址" class="el-form-item-admin-back" prop="address">
         <el-input v-model="form.address" type="text" maxlength="32"/>
       </el-form-item>
-      <el-form-item label="邮箱" class="el-form-item-user-back" prop="email">
+      <el-form-item label="邮箱" class="el-form-item-admin-back" prop="email">
         <el-input v-model="form.email"/>
       </el-form-item>
-      <el-form-item label="手机" class="el-form-item-user-back" prop="phone">
+      <el-form-item label="手机" class="el-form-item-admin-back" prop="phone">
         <el-input v-model="form.phone" type="number" maxlength="11" minlength="11" show-word-limit/>
-      </el-form-item>
-      <el-form-item label="学历" class="el-form-item-user-back" prop="education">
-        <el-select v-model="form.education" placeholder="Select" style="width: 240px">
-          <el-option
-              v-for="item in educationOptions"
-              :key="item.id"
-              :label="item.value"
-              :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="专业" class="el-form-item-user-back" prop="major">
-        <el-input v-model="form.major" type="text" maxlength="32"/>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -286,27 +264,27 @@ const submitForm = async (formEl, val) => {
 </template>
 
 <style scoped>
-.user-manage-top-right {
+.admin-manage-top-right {
   float: right;
   margin-right: 50px;
 }
 
-.el-card-back-user {
+.el-card-back-admin {
   margin-top: 50px;
 }
 
-.el-pagination-back-user {
+.el-pagination-back-admin {
   margin-top: 20px;
   float: right;
   margin-bottom: 20px;
 }
 
-.el-form-item-user-back {
+.el-form-item-admin-back {
   text-align: center;
   align-items: center;
 }
 
-.el-dialog-user-back {
+.el-dialog-admin-back {
   background-color: #44854d;
 }
 </style>
