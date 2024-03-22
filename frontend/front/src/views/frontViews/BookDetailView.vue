@@ -11,6 +11,7 @@ import {onMounted, onUnmounted, reactive, ref} from "vue";
 import {useImgStore} from "../../store/imgFun.js";
 import router from "../../router/index.js";
 import {ElMessage} from "element-plus";
+import moment from "moment";
 
 
 const route = useRoute()
@@ -39,7 +40,7 @@ const getCommentData = (id) => {
     for (let item of commentInfo) {
       getUserIDDetail(item.userid).then(res => {
         item.username = res.data.username
-        item.time = new Date(item.time).toISOString().slice(0, 19).replace('T', ' ')
+        item.time = moment(item.time).format('YYYY-MM-DD HH:mm:ss')
       })
     }
   }).catch(err => {
@@ -47,8 +48,9 @@ const getCommentData = (id) => {
   })
 }
 let setIntervalFun = setInterval(() => {
-  myCommentInfo.time = new Date().toISOString().slice(0, 19).replace('T', ' ')
-  borrowInfoDetail.borrowtime = new Date().toISOString().slice(0, 19).replace('T', ' ')
+  let timer = Date.now()
+  myCommentInfo.time = moment(timer).format('YYYY-MM-DD HH:mm:ss')
+  borrowInfoDetail.borrowtime = moment(timer).format('YYYY-MM-DD HH:mm:ss')
 }, 1000)
 onMounted(() => {
   getData(route.params.id)

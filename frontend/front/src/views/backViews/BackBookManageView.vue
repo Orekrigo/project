@@ -165,7 +165,7 @@ const submitForm = async (formEl, val) => {
   await formEl.validate((valid) => {
         if (valid) {
           if (val === 1) {
-            form.date = moment(form.date, 'YYYY-MM-DD').format('YYYY-MM-DD');
+            form.date = moment(form.date).format('YYYY-MM-DD');
             postBookInfo(form).then(() => {
               dialogFormVisible.value = false
               getData()
@@ -174,7 +174,7 @@ const submitForm = async (formEl, val) => {
               alertError(err)
             })
           } else {
-            form.date = moment(form.date, 'YYYY-MM-DD').format('YYYY-MM-DD');
+            form.date = moment(form.date).format('YYYY-MM-DD');
             bookId.value = form.id
             delete form.id
             dialogFormVisible.value = false
@@ -223,7 +223,6 @@ const submitForm = async (formEl, val) => {
         <el-table-column align="right">
           <template #default="scope">
             <el-button size="default" @click="bookInfoDetail(scope.$index, scope.row)">更多信息</el-button>
-
             <el-button size="default" @click="bookInfoEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button
                 size="default"

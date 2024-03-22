@@ -46,6 +46,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     filterset_fields = ["bookid", "userid"]
     ordering_fields = ["time"]
+    search_fields = ["content"]
 
 
 class RecommendViewSet(viewsets.ModelViewSet):

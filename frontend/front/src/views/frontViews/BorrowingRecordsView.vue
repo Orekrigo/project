@@ -4,6 +4,7 @@ import {deleteBorrowInfo, getBookDetail, getBorrowListByUser, putBorrowInfo} fro
 import {ElMessage} from "element-plus";
 import {useImgStore} from "../../store/imgFun.js";
 import router from "../../router/index.js";
+import moment from "moment";
 
 const store = useImgStore()
 const {getImgUrl} = store
@@ -31,9 +32,9 @@ const getBorrowData = () => {
         delete res.data.id
         Object.assign(item, res.data)
       })
-      item.borrowtime = new Date(item.borrowtime).toISOString().slice(0, 19).replace('T', ' ')
+      item.borrowtime = moment(item.borrowtime).format('YYYY-MM-DD HH:mm:ss');
       if (item.returntime !== null) {
-        item.returntime = new Date(item.returntime).toISOString().slice(0, 19).replace('T', ' ')
+        item.returntime = moment(item.returntime).format('YYYY-MM-DD HH:mm:ss');
       }
     }
   }).catch(err => {
@@ -42,7 +43,7 @@ const getBorrowData = () => {
 }
 const borrowRecordsInfoDisplay = reactive([])
 let setIntervalFun = setInterval(() => {
-  borrowRecordInfo.returntime = new Date().toISOString().slice(0, 19).replace('T', ' ')
+  borrowRecordInfo.returntime = moment(borrowRecordInfo.returntime).format('YYYY-MM-DD HH:mm:ss');
 }, 1000)
 onMounted(() => {
   getBorrowData()

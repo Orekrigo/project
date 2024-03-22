@@ -85,6 +85,18 @@ async function deleteCommentInfo(id) {
     return await axios.delete(`api/comment/${id}`)
 }
 
+async function getCommentList() {
+    return await axios.get(`api/comment/`)
+}
+
+async function searchComment(params) {
+    return await axios.get(`api/comment/?search=${params}`)
+}
+
+async function putComment(id, params) {
+    return await axios.put(`api/comment/${id}/`, params)
+}
+
 // borrow
 async function postBorrowInfo(params) {
     return await axios.post(`api/borrow/`, params)
@@ -183,5 +195,8 @@ export {
     deleteBook,
     getAdminList,
     searchAdmin,
-    postAdminInfo
+    postAdminInfo,
+    getCommentList,
+    searchComment,
+    putComment
 }

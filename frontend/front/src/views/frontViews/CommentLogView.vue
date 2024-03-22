@@ -2,10 +2,12 @@
 import {onMounted, reactive} from "vue";
 import {deleteCommentInfo, getBookDetail, getCommentByUserID, putBookInfo} from "../../api/api.js";
 import {ElMessage} from "element-plus";
+import moment from "moment";
 
 const bookInfoChanged = reactive({})
 const commentInfo = reactive([])
 const userID = sessionStorage.getItem('userID')
+
 
 const alertSuccess = (info) => {
   ElMessage({
@@ -24,7 +26,7 @@ const getCommentData = (id) => {
       getBookDetail(item.bookid).then(res => {
         item.title = res.data.title
       })
-      item.time = new Date(item.time).toISOString().slice(0, 19).replace('T', ' ')
+      item.time = moment(item.time).format('YYYY-MM-DD HH:mm:ss');
     }
   }).catch(err => {
     alertError(err)
@@ -42,7 +44,7 @@ const deleteCommentFun = (item) => {
       let num = (bookInfoChanged.score * bookInfoChanged.score_number - bookInfoChanged.score) / (bookInfoChanged.score_number - 1)
       bookInfoChanged.score = parseFloat(num.toFixed(1))
       bookInfoChanged.score_number -= 1
-      putBookInfo(item.bookid, bookInfoChanged).then(()=>{
+      putBookInfo(item.bookid, bookInfoChanged).then(() => {
         alertSuccess("删除成功")
       })
     }).catch(err => {

@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     "app.apps.AppConfigs",
     'drf_yasg',
     'corsheaders',
-    'django_filters'
+    'django_filters',
+    'django_apscheduler',
 ]
 
 MIDDLEWARE = [
