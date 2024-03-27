@@ -6,30 +6,41 @@ import router from "../../router/index.js";
 
 const store = useImgStore()
 const {getImgUrl} = store
-let count = reactive({})
-const bookInfoRank = reactive([])
-const allCommentInfo = reactive([])
+const count = reactive({})
+const allBorrowInfo = reactive([])
+const uniqueArray = reactive([])
 onMounted(() => {
   getAllBorrowInfo().then(res => {
-    allCommentInfo.length = 0
-    bookInfoRank.length = 0
-    allCommentInfo.push(...res.data)
-    for (let item of allCommentInfo) {
+    allBorrowInfo.length = 0
+    for (let item of res.data) {
+      delete item.id
+      delete item.borrowtime
+      delete item.returntime
+      delete item.userid
       count[item.bookid] = 0
     }
-    for (let item of allCommentInfo) {
+    for (let item of res.data) {
       count[item.bookid] += 1
+      allBorrowInfo.push(item)
     }
-    for (let key in count) {
-      if (count[key]) {
-        getBookDetail(key).then(res => {
-          res.data.sum = count[key]
-          bookInfoRank.push(res.data)
-        }).catch(err => {
-          alert(err)
-        })
-      }
+    uniqueArray.push(...[...new Set(allBorrowInfo.map(JSON.stringify))].map(JSON.parse))
+    for (let item of uniqueArray) {
+      item.sum = count[item.bookid]
     }
+    uniqueArray.sort((a, b) => b.sum - a.sum)
+    for (let item of uniqueArray) {
+      getBookDetail(item.bookid).then(res => {
+        item.title = res.data.title
+        item.author = res.data.author
+        item.publish = res.data.publish
+        item.picture = res.data.picture
+        item.score_number = res.data.score_number
+        item.score = res.data.score
+      }).catch(err => {
+        alert(err)
+      })
+    }
+    console.log(uniqueArray)
   }).catch(err => {
     alert(err)
   })
@@ -40,11 +51,11 @@ const clickButton = (id) => {
 </script>
 
 <template>
-  <div class="flex flex-wrap gap-4" v-if="allCommentInfo.length">
+  <div class="flex flex-wrap gap-4" v-if="allBorrowInfo.length">
     <h1>图书借阅排行榜：</h1>
-    <el-card shadow="always" class="el-card-borrow-rank" v-for="item in bookInfoRank" :key="item.id">
+    <el-card shadow="always" class="el-card-borrow-rank" v-for="item in uniqueArray" :key="item.id">
       <div class="card-content-borrow-rank">
-        <div>借阅次数：{{ item.sum }}</div>
+        <div style="margin-bottom: 10px">借阅次数：{{ item.sum }}</div>
         <el-image :src="getImgUrl(item.picture)" class="el-image-borrow-rank" fit="fill"></el-image>
         <div class="bookInfo-borrow-rank">
           <div class="title-borrow-rank">书名：{{ item.title }}</div>

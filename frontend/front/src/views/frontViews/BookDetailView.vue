@@ -105,7 +105,15 @@ const alertError = (info) => {
 }
 const commentInfo = reactive([])
 const commentEvent = () => {
-  dialogFormVisible.value = true
+  getBorrowInfoByUserAndBook(sessionStorage.getItem('userID'), route.params.id).then(res => {
+    if(res.data.length){
+      alertError("您已经评论过该书！")
+    } else{
+      dialogFormVisible.value = true
+    }
+  }).catch(err => {
+    alertError(err)
+  })
 }
 const dialogFormVisible = ref(false)
 const myCommentInfo = reactive({

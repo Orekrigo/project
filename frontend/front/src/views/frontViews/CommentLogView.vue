@@ -1,14 +1,14 @@
 <script setup>
-import {onMounted, reactive} from "vue";
-import {deleteCommentInfo, getBookDetail, getCommentByUserID, putBookInfo} from "../../api/api.js";
+import {onMounted, reactive, ref} from "vue";
+import {deleteCommentInfo, getBookDetail, getCommentByUserID, putBookInfo, putComment} from "../../api/api.js";
 import {ElMessage} from "element-plus";
 import moment from "moment";
 
 const bookInfoChanged = reactive({})
 const commentInfo = reactive([])
 const userID = sessionStorage.getItem('userID')
-
-
+const dialogFormVisible = ref(false)
+const form = reactive({})
 const alertSuccess = (info) => {
   ElMessage({
     message: `${info}`,
@@ -54,6 +54,24 @@ const deleteCommentFun = (item) => {
     alertError(err)
   })
 }
+const editCommentFun = (item) => {
+  Object.assign(form, item)
+  dialogFormVisible.value = true
+}
+const putCommentFun = () => {
+  let id = form.id
+  delete form.id
+  delete form.title
+  form.time = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+  console.log(form)
+  putComment(id, form).then(() => {
+    alertSuccess("修改成功")
+    dialogFormVisible.value = false
+    getCommentData(userID)
+  }).catch(err => {
+    alertError(err)
+  })
+}
 </script>
 
 <template>
@@ -83,6 +101,7 @@ const deleteCommentFun = (item) => {
             {{ item.content }}
           </div>
           <div class="button-comment-container">
+            <el-button type="warning" @click="editCommentFun(item)">修改内容</el-button>
             <el-button type="danger" @click="deleteCommentFun(item)">删除评论</el-button>
           </div>
         </el-card>
@@ -90,6 +109,30 @@ const deleteCommentFun = (item) => {
       </div>
     </div>
   </div>
+  <el-dialog v-model="dialogFormVisible" title="填写评价信息" width="500">
+    <el-form :model="form">
+      <el-form-item label="评分">
+        <el-rate
+            class="el-rate-detail"
+            v-model="form.score"
+            show-score
+            text-color="#ff9900"
+            :max=10
+        />
+      </el-form-item>
+      <el-form-item label="评论内容">
+        <el-input type="textarea" v-model="form.content"/>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="putCommentFun">
+          确定
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <style scoped>
@@ -113,6 +156,7 @@ const deleteCommentFun = (item) => {
 
 .button-comment-container {
   margin-top: 20px;
-  margin-left: 700px;
+  margin-left: 600px;
+  width: 200px;
 }
 </style>
