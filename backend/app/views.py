@@ -52,3 +52,4 @@ class CommentViewSet(viewsets.ModelViewSet):
 class RecommendViewSet(viewsets.ModelViewSet):
     queryset = Recommend.objects.all()
     serializer_class = RecommendSerializer
+    filterset_fields = ["userid"]

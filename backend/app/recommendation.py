@@ -14,26 +14,26 @@ class Recommendation:
         self.initial_matrix = Comment.objects.values("userid", "bookid", "score")
 
     def get_matrix(self):
-        user_array = [[0 for _ in range(self.book_max_id)] for _ in range(self.user_max_id)]
+        user_array = [[0 for _ in range(self.book_max_id + 1)] for _ in range(self.user_max_id + 1)]
         for item in self.initial_matrix:
             user_array[item["userid"]][item["bookid"]] = float(item["score"])
         return user_array
 
     def get_similarity(self):
         user_array = self.get_matrix()
-        similarity_array = [[0 for _ in range(self.user_max_id)] for _ in range(self.user_max_id)]
-        for i in range(len(similarity_array) - 1):
-            for j in range(i + 1, len(similarity_array[0])):
+        similarity_array = [[0 for _ in range(self.user_max_id + 1)] for _ in range(self.user_max_id + 1)]
+        for i in range(len(similarity_array)):
+            for j in range(len(similarity_array[0])):
                 similarity_array[i][j] = self.calculate_similarity(user_array[i], user_array[j])
         return similarity_array
 
     # K=3
     def k_nearest_neighbors(self):
         similarity_array = self.get_similarity()
-        k_array = [0 for _ in range(self.user_max_id)]
-        indices = [0 for _ in range(self.user_max_id)]
-        for i in range(len(similarity_array) - 1):
-            for j in range(i + 1, len(similarity_array[0])):
+        k_array = [0 for _ in range(self.user_max_id + 1)]
+        indices = [0 for _ in range(self.user_max_id + 1)]
+        for i in range(len(similarity_array)):
+            for j in range(len(similarity_array[0])):
                 k_array[j] = similarity_array[i][j]
             indices[i] = self.find_three_largest_indices(k_array)
         return indices
@@ -86,3 +86,4 @@ class Recommendation:
         for i in range(1, len(res_book)):
             user_instance = User.objects.get(pk=i)
             Recommend.objects.create(userid=user_instance, bookid=res_book[i])
+        print("recommendation done\n")

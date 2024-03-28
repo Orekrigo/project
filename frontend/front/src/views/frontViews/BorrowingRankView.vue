@@ -30,6 +30,7 @@ onMounted(() => {
     uniqueArray.sort((a, b) => b.sum - a.sum)
     for (let item of uniqueArray) {
       getBookDetail(item.bookid).then(res => {
+        item.id = res.data.id
         item.title = res.data.title
         item.author = res.data.author
         item.publish = res.data.publish
@@ -52,7 +53,7 @@ const clickButton = (id) => {
 
 <template>
   <div class="flex flex-wrap gap-4" v-if="allBorrowInfo.length">
-    <h1>图书借阅排行榜：</h1>
+    <h1 style="margin-left: 400px">图书借阅排行榜：</h1>
     <el-card shadow="always" class="el-card-borrow-rank" v-for="item in uniqueArray" :key="item.id">
       <div class="card-content-borrow-rank">
         <div style="margin-bottom: 10px">借阅次数：{{ item.sum }}</div>

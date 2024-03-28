@@ -160,6 +160,14 @@ async function searchBook(params) {
     return await axios.get(`api/bookAll/?search=${params}`)
 }
 
+//recommendation
+async function getRecommendByUser(userid) {
+    return await axios.get(`api/recommend/?userid=${userid}`)
+}
+async function getRecommendList() {
+    return await axios.get(`api/recommend/`)
+}
+
 export {
     getBookList,
     getBookDetail,
@@ -198,5 +206,7 @@ export {
     postAdminInfo,
     getCommentList,
     searchComment,
-    putComment
+    putComment,
+    getRecommendByUser,
+    getRecommendList
 }
