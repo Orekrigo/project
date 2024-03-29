@@ -121,6 +121,9 @@ async function deleteBorrowInfo(id) {
 async function getAllBorrowInfo() {
     return await axios.get(`api/borrow/`)
 }
+async function getBorrowByUser(id) {
+    return await axios.get(`api/borrow/?userid=${id}`)
+}
 
 // admin
 async function getAdminInfoByUsername(username) {
@@ -164,8 +167,16 @@ async function searchBook(params) {
 async function getRecommendByUser(userid) {
     return await axios.get(`api/recommend/?userid=${userid}`)
 }
+
 async function getRecommendList() {
     return await axios.get(`api/recommend/`)
+}
+
+async function deleteRecommendInfo(id) {
+    return await axios.delete(`api/recommend/${id}/`)
+}
+async function putRecommendInfo(id, params) {
+    return await axios.put(`api/recommend/${id}/`, params)
 }
 
 export {
@@ -208,5 +219,8 @@ export {
     searchComment,
     putComment,
     getRecommendByUser,
-    getRecommendList
+    getRecommendList,
+    deleteRecommendInfo,
+    putRecommendInfo,
+    getBorrowByUser
 }

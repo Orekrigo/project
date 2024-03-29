@@ -3,12 +3,13 @@ import {onMounted, reactive, ref} from "vue";
 import {
   deleteBorrowInfo, getAllBorrowInfo,
   getBookByTitle,
-  getBookDetail,
+  getBookDetail, getBorrowByUser, getRecommendByUser,
   getUserIDDetail,
   getUsernameDetail, postBorrowInfo, putBorrowInfo,
 } from "../../api/api.js";
 import {ElMessage, ElMessageBox} from "element-plus";
 import moment from "moment";
+import {Search} from "@element-plus/icons-vue";
 
 const input = ref('')
 const tableData = reactive([])
@@ -96,6 +97,30 @@ const borrowInfoDelete = (index, row) => {
     })
   })
 }
+const searchBorrowInfo = () => {
+  if (!input.value) {
+    getData()
+  } else {
+    getUsernameDetail(input.value).then(res => {
+      if (!res.data.length) {
+        alertError('不存在此用户！')
+      } else {
+        getBorrowByUser(res.data[0].id).then(res => {
+          alertSuccess("搜索成功！")
+          tableData.length = 0
+          tableNowData.length = 0
+          searchBorrowData.current = 1
+          tableData.push(...res.data)
+          changeIDToName()
+          searchBorrowData.count = res.data.length
+          tableNowData.push(...tableData.slice(0, searchBorrowData.pageSize))
+        })
+      }
+    }).catch(err => {
+      alertError(err)
+    })
+  }
+}
 const addBorrow = () => {
   Object.assign(form, nullForm)
   form.borrowtime = null
@@ -170,7 +195,14 @@ const submitForm = async (formEl, val) => {
     <div>
       <el-button type="primary" @click="addBorrow">新增+</el-button>
       <div class="borrow-manage-top-right">
-        Welcome here
+        <el-input
+            v-model="input"
+            style="width: 240px"
+            size="default"
+            placeholder="根据用户账号搜索"
+            :prefix-icon="Search"
+        />
+        <el-button type="primary" style="margin-left: 10px" @click="searchBorrowInfo">搜索</el-button>
       </div>
     </div>
     <el-card class="el-card-back-borrow">
@@ -227,8 +259,6 @@ const submitForm = async (formEl, val) => {
 .borrow-manage-top-right {
   float: right;
   margin-right: 50px;
-  font-size: 20px;
-  color: darkblue;
 }
 
 .el-card-back-borrow {
