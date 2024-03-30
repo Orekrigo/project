@@ -56,7 +56,7 @@ const clickButton = (id) => {
     <h1 style="margin-left: 400px">图书借阅排行榜：</h1>
     <el-card shadow="always" class="el-card-borrow-rank" v-for="item in uniqueArray" :key="item.id">
       <div class="card-content-borrow-rank">
-        <div style="margin-bottom: 10px">借阅次数：{{ item.sum }}</div>
+        <div style="margin-bottom: 10px;color: #0b1dee">借阅次数：{{ item.sum }}</div>
         <el-image :src="getImgUrl(item.picture)" class="el-image-borrow-rank" fit="fill"></el-image>
         <div class="bookInfo-borrow-rank">
           <div class="title-borrow-rank">书名：{{ item.title }}</div>
