@@ -21,20 +21,20 @@ class Recommendation:
 
     def get_similarity(self):
         user_array = self.get_matrix()
-        similarity_array = [[0 for _ in range(self.user_max_id + 1)] for _ in range(self.user_max_id + 1)]
-        for i in range(len(similarity_array)):
-            for j in range(len(similarity_array[0])):
-                similarity_array[i][j] = self.calculate_similarity(user_array[i], user_array[j])
-        return similarity_array
+        similarity_matrix = [[0 for _ in range(self.user_max_id + 1)] for _ in range(self.user_max_id + 1)]
+        for i in range(len(similarity_matrix)):
+            for j in range(len(similarity_matrix[0])):
+                similarity_matrix[i][j] = self.calculate_similarity(user_array[i], user_array[j])
+        return similarity_matrix
 
     # K=3
     def k_nearest_neighbors(self):
-        similarity_array = self.get_similarity()
+        similarity_matrix = self.get_similarity()
         k_array = [0 for _ in range(self.user_max_id + 1)]
         indices = [0 for _ in range(self.user_max_id + 1)]
-        for i in range(len(similarity_array)):
-            for j in range(len(similarity_array[0])):
-                k_array[j] = similarity_array[i][j]
+        for i in range(len(similarity_matrix)):
+            for j in range(len(similarity_matrix[0])):
+                k_array[j] = similarity_matrix[i][j]
             indices[i] = self.find_three_largest_indices(k_array)
         return indices
 

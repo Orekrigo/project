@@ -2,7 +2,7 @@
 import {useRoute} from "vue-router";
 import {
   getBookDetail, getBorrowInfoByUserAndBook,
-  getCommentByBookID,
+  getCommentByBookID, getCommentByUserAndBook,
   getUserIDDetail, postBorrowInfo,
   postComment,
   putBookInfo
@@ -105,7 +105,8 @@ const alertError = (info) => {
 }
 const commentInfo = reactive([])
 const commentEvent = () => {
-  getBorrowInfoByUserAndBook(sessionStorage.getItem('userID'), route.params.id).then(res => {
+  getCommentByUserAndBook(sessionStorage.getItem('userID'), route.params.id).then(res => {
+    console.log(res.data)
     if(res.data.length){
       alertError("您已经评论过该书！")
     } else{
@@ -191,6 +192,7 @@ const clickBorrowFun = () => {
           <el-button type="info" @click="clickBorrowFun">点击借阅</el-button>
         </div>
       </div>
+      <el-divider border-style="dashed" />
       <div class="intro-info-container">
         <div class="info-intro-title">内容简介...</div>
         <div style="white-space: pre-wrap;">
@@ -201,6 +203,7 @@ const clickBorrowFun = () => {
           <span v-else>展开全部...</span>
         </el-button>
       </div>
+      <el-divider border-style="dashed" />
       <div>
         <div class="info-intro-title">作者简介...</div>
         <div style="white-space: pre-wrap;">
@@ -211,6 +214,7 @@ const clickBorrowFun = () => {
           <span v-else>展开全部...</span>
         </el-button>
       </div>
+      <el-divider border-style="dashed" />
       <div>
         <div class="info-intro-title">目录...</div>
         <div style="white-space: pre-wrap;">
@@ -221,6 +225,7 @@ const clickBorrowFun = () => {
           <span v-else>展开全部...</span>
         </el-button>
       </div>
+      <el-divider border-style="dashed" />
       <div class="comment-container">
         <div>
           <span class="info-intro-title">评论...</span>

@@ -22,10 +22,14 @@ onMounted(() => {
 const clickButton = (id) => {
   router.push({name: 'bookDetail', params: {id: id}})
 }
+const goBack = () => {
+  router.back()
+}
 </script>
 
 <template>
   <div class="class-detail-container">
+    <el-button type="primary" round @click="goBack">返回</el-button>
     <h1>{{ classification }}类别的图书有：</h1>
     <el-card shadow="always" class="el-card-class-detail" v-for="item in bookClassDetailInfo" :key="item.id">
       <div class="card-content-class-detail">
@@ -79,7 +83,8 @@ const clickButton = (id) => {
   height: 150px;
   float: left;
 }
-.class-detail-container{
+
+.class-detail-container {
 
 }
 </style>

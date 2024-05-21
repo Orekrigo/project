@@ -97,6 +97,10 @@ async function putComment(id, params) {
     return await axios.put(`api/comment/${id}/`, params)
 }
 
+async function getCommentByUserAndBook(userid, bookid) {
+    return await axios.get(`api/comment/?userid=${userid}&bookid=${bookid}`)
+}
+
 // borrow
 async function postBorrowInfo(params) {
     return await axios.post(`api/borrow/`, params)
@@ -222,5 +226,6 @@ export {
     getRecommendList,
     deleteRecommendInfo,
     putRecommendInfo,
-    getBorrowByUser
+    getBorrowByUser,
+    getCommentByUserAndBook
 }

@@ -71,7 +71,7 @@ const cancel = () => {
 .el-card-login {
   width: 400px;
   height: 400px;
-  background-color: rgba(199, 191, 191, 0.6);
+  background-color: rgba(199, 191, 191, 0.8);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -79,7 +79,11 @@ const cancel = () => {
 }
 
 .login-container {
-  background-color: #56e3fc;
+  //background-color: #56e3fc;
+  background-image: url("src/assets/loginBack.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
   height: 100vh;
 }
 
