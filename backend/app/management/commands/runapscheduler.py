@@ -12,7 +12,7 @@ class Command(BaseCommand):
         scheduler = BackgroundScheduler(timezone=settings.TIME_ZONE)
         scheduler.add_jobstore(DjangoJobStore(), "default")
         job_id = "recommendation"
-        scheduler.add_job(job.result, 'interval', hours=2, id=job_id, replace_existing=True)
+        scheduler.add_job(job.result, 'interval', seconds=30, id=job_id, replace_existing=True)
 
         try:
             scheduler.start()

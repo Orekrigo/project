@@ -13,6 +13,11 @@ class Recommendation:
         self.book_max_id = Book.objects.aggregate(max_id=Max('id'))['max_id']
         self.initial_matrix = Comment.objects.values("userid", "bookid", "score")
 
+    def update_init(self):
+        self.user_max_id = User.objects.aggregate(max_id=Max('id'))['max_id']
+        self.book_max_id = Book.objects.aggregate(max_id=Max('id'))['max_id']
+        self.initial_matrix = Comment.objects.values("userid", "bookid", "score")
+
     def get_matrix(self):
         user_array = [[0 for _ in range(self.book_max_id + 1)] for _ in range(self.user_max_id + 1)]
         for item in self.initial_matrix:
@@ -73,6 +78,7 @@ class Recommendation:
         return list(books)
 
     def result(self):
+        self.update_init()
         res_user = self.k_nearest_neighbors()
         res_book = [0 for _ in range(len(res_user))]
         for i in range(len(res_user)):
@@ -84,6 +90,7 @@ class Recommendation:
                         res_book[i].append(res1[k])
         Recommend.objects.all().delete()
         for i in range(1, len(res_book)):
-            user_instance = User.objects.get(pk=i)
-            Recommend.objects.create(userid=user_instance, bookid=res_book[i])
+            if i in User.objects.values_list("id", flat=True):
+                user_instance = User.objects.get(pk=i)
+                Recommend.objects.create(userid=user_instance, bookid=res_book[i])
         print("recommendation done\n")

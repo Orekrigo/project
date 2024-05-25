@@ -195,7 +195,7 @@ const submitForm = async (formEl) => {
     <el-divider/>
     <div>
       <el-button type="primary" @click="addRecommendation" class="recommendation-manage-top-left">新增+</el-button>
-      <div class="recommendation-manage-top-middle">尽量不要修改图书推荐信息，因为系统后台每两小时根据用户行为更新一次。
+      <div class="recommendation-manage-top-middle">尽量不要修改图书推荐信息，因为系统后台每30s根据用户行为更新一次。
       </div>
       <div class="recommendation-manage-top-right">
         <el-input
