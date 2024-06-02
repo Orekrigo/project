@@ -107,5 +107,15 @@ net stop mysql //停止
 
 图书推荐系统：  http://localhost:5173/#/login
 
+账号：testUser
+
+密码：123456
+
 后台管理系统：  http://localhost:5173/#/backLogin
+
+账号：testAdmin
+
+密码：111111
+
+
 
